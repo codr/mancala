@@ -4,7 +4,7 @@ import Board from '../components/Board'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    board: state.board
+    board: state.gameState.board
   }
 }
 

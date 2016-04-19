@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux';
-import board from './Board';
-import turn from './Turn';
+import gameState from './GameState';
 
 const rootReducer = combineReducers({
-  board,
-  turn,
+  gameState
 });
 
 export default rootReducer;

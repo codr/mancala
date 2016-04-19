@@ -4,15 +4,15 @@ import Hole from '../components/Hole'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    value: state.board[ownProps.row][ownProps.column],
-    active: state.turn === ownProps.row,
+    value: state.gameState.board[ownProps.row][ownProps.column],
+    active: state.gameState.turn === ownProps.row,
   }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(updateTurn(ownProps.rown, ownProps.column));
+      // dispatch(updateTurn(ownProps.rown, ownProps.column));
       dispatch(emptyHole(ownProps.row, ownProps.column));
       // dispatch(checkCapture());
       // dispatch(checkEndGame());
