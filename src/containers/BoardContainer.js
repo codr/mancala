@@ -1,10 +1,13 @@
 import { connect } from 'react-redux'
-import { emptyHole } from '../actions'
 import Board from '../components/Board'
+import { isGameOver, finalScore } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
+  const board = state.gameState.board;
   return {
-    board: state.gameState.board
+    board: board,
+    gameOver: isGameOver(board),
+    finalScore: finalScore(board),
   }
 }
 

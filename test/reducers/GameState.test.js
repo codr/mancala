@@ -81,7 +81,7 @@ describe('GameState' , () => {
 
   describe('.turn', () => {
 
-    describe('when it is play 0s turn', () => {
+    describe('when it is player 0s turn', () => {
       var initialState;
 
       beforeEach(() => {
@@ -102,7 +102,7 @@ describe('GameState' , () => {
         expect( newState.turn ).to.be.eql(0);
       });
 
-      it('does change turn if last bead is on elsewhere', () => {
+      it('does change turn if last bead is on a normal hole', () => {
         var action = emptyHole(0, 2)
 
         var newState = GameState(initialState, action);
@@ -112,7 +112,7 @@ describe('GameState' , () => {
 
     });
 
-    describe('when it is play 1s turn', () => {
+    describe('when it is player 1s turn', () => {
       var initialState;
 
       beforeEach(() => {
@@ -134,7 +134,7 @@ describe('GameState' , () => {
       });
 
 
-      it('does change turn if last bead is on elsewhere', () => {
+      it('does change turn if last bead is on a normal hole', () => {
         var action = emptyHole(1, 5)
 
         var newState = GameState(initialState, action);

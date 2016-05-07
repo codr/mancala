@@ -2,7 +2,7 @@ import React from 'react';
 import EndHole from './EndHole';
 import ActiveHoles from './ActiveHoles';
 
-const Board = ({ board }) => (
+const Board = ({ board, gameOver, finalScore }) => (
   <div className="row">
     <EndHole
       className="col-sm-offset-2 col-sm-1"
