@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import Board from '../components/Board'
-import { isGameOver, finalScore } from '../actions'
+import { isGameOver, finalScore, resetGame } from '../actions'
 
 const mapStateToProps = (state, ownProps) => {
   const board = state.gameState.board;
@@ -11,8 +11,17 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    resetGame: () => {
+      dispatch(resetGame());
+    }
+  };
+}
+
 const BoardContainer = connect(
   mapStateToProps,
+  mapDispatchToProps
 )(Board)
 
 export default BoardContainer

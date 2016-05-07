@@ -17,18 +17,19 @@ const customStyles = {
 export default class GameOverModal extends Component {
 
   render() {
-    const {score, ...props} = this.props;
+    const {score, resetGame, ...props} = this.props;
     return (
       <Modal
         {...props}
         ref="modal"
+        onRequestClose={resetGame}
         style={customStyles}
         >
         <div className="modal-header">
           <button
             type="button"
             className="close"
-            onClick={()=>{}}>
+            onClick={resetGame}>
             <span>×</span>
           </button>
           <h4 ref="subtitle" className="modal-title">Game Over</h4>

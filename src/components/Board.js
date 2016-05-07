@@ -3,7 +3,7 @@ import EndHole from './EndHole';
 import ActiveHoles from './ActiveHoles';
 import GameOverModal from './GameOverModal';
 
-const Board = ({ board, isGameOver, finalScore }) => (
+const Board = ({ board, isGameOver, finalScore, resetGame }) => (
   <div className="row">
     <EndHole
       className="col-sm-offset-2 col-sm-1"
@@ -17,6 +17,7 @@ const Board = ({ board, isGameOver, finalScore }) => (
     <GameOverModal
       isOpen={isGameOver}
       score={finalScore}
+      resetGame={resetGame}
     />
   </div>
 );

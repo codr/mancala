@@ -3,7 +3,7 @@
  */
 
 export const EMPTY_HOLE = 'EMPTY_HOLE';
-export const CHECK_END_GAME = 'CHECK_END_GAME';
+export const RESTART_GAME = 'RESTART_GAME';
 
 /*
  * action creators
@@ -17,9 +17,9 @@ export const emptyHole = (row, column) => {
   }
 }
 
-export const checkEndGame = () => {
+export const resetGame = () => {
   return {
-    type: CHECK_END_GAME,
+    type: RESTART_GAME
   }
 }
 

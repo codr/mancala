@@ -1,3 +1,4 @@
+import { EMPTY_HOLE, RESTART_GAME } from '../actions';
 
 const initialState = {
   board:[
@@ -9,13 +10,15 @@ const initialState = {
 
 export default function gameState(state = initialState, action) {
   switch (action.type) {
-    case 'EMPTY_HOLE':
+    case EMPTY_HOLE:
       var board = cloneBoard(state.board);
       var lastPiece = moveHole({board, turn: state.turn}, action.row, action.column);
       var turn = getNextTrun(state, action.row, action.column);
       if (shouldCapture(state, lastPiece))
         capture(board, lastPiece);
       return {turn, board}
+    case RESTART_GAME:
+      return initialState;
     default:
       return state
   }
