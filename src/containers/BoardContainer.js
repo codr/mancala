@@ -6,7 +6,7 @@ const mapStateToProps = (state, ownProps) => {
   const board = state.gameState.board;
   return {
     board: board,
-    gameOver: isGameOver(board),
+    isGameOver: isGameOver(board),
     finalScore: finalScore(board),
   }
 }

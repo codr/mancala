@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "",
   "scripts": {
-    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --port 8888",
+    "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --port 8888",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.js'",
     "test:watch": "npm run test -- --watch"
   },
@@ -34,6 +34,7 @@
     "classnames": "^2.2.3",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
+    "react-modal": "^1.2.1",
     "react-redux": "^4.0.0",
     "redux": "^3.0.4"
   }

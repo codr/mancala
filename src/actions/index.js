@@ -31,7 +31,7 @@ const sum = (a,b) => a+b;
 
 export const isGameOver = (board) =>
   (board[0].reduce(sum, 0) === board[0][0] ||
-    board[1].reduce(sum, 0) === board[1][board.length-1]);
+    board[1].reduce(sum, 0) === board[1][board[1].length-1]);
 
 export const finalScore = (board) =>
   [board[0].reduce(sum, 0), board[1].reduce(sum, 0)]
