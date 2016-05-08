@@ -146,4 +146,32 @@ describe('GameState' , () => {
 
   });
 
+  describe('when an illegal move is tried', () => {
+    let newState;
+
+    beforeEach(() => {
+      var initialState = {
+        board: [
+          [6, 10, 4, 4, 0, 2, 1],
+          [9, 1, 0, 6, 0, 0, 5]
+        ],
+        turn: 1,
+      }
+      var action = emptyHole(1, 2);
+      newState = GameState(initialState, action);
+    })
+
+    it('doesn\'t change the board', () => {
+      expect( newState.board ).to.eql([
+        [6, 10, 4, 4, 0, 2, 1],
+        [9, 1, 0, 6, 0, 0, 5]
+      ])
+    });
+
+    it('doesn\'t change the turn', () => {
+      expect( newState.turn ).to.eql(1)
+    })
+
+  })
+
 });

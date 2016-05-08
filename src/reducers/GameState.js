@@ -30,6 +30,7 @@ function cloneBoard(board) {
 
 function moveHole(state, row, column) {
   var count = state.board[row][column];
+  if (count === 0) return;
   state.board[row][column] = 0;
   return moveRecursive(state, row, column, count);
 }
@@ -57,6 +58,7 @@ function moveRecursive({board, turn}, row, column, count) {
 
 function getNextTrun(state, row, column) {
   var hand = state.board[row][column];
+  if (hand === 0) return state.turn;
   var nHand = hand % 13;
   if (state.turn === 0) {
     if (nHand === column) return 0;
@@ -66,7 +68,7 @@ function getNextTrun(state, row, column) {
   return state.turn === 0 ? 1: 0;
 }
 
-function shouldCapture(state, {row, column}) {
+function shouldCapture(state, {row, column} = {}) {
   return (state.turn === row &&
     state.board[row][column] === 0 &&
     !isScoreHole({row, column}));

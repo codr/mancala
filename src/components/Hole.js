@@ -8,9 +8,10 @@ const Hole = ({onClick, className, value, active}) => (
       {
         disabled: !active,
         'btn-primary': active,
+        'not-allowed': value === 0,
       }
     )}
-    onClick={active && onClick}>
+    onClick={(value !== 0) && active && onClick}>
     {value}
   </button>
 );
