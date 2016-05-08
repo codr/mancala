@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "Simple mancala game using Redux with React and Babel support",
   "main": "index.js",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codr/mancala.git"
+  },
   "scripts": {
     "build": "env NODE_ENV=production webpack --config ./webpack.config.js --progress --colors",
     "start": "webpack-dev-server --inline --port 8888",

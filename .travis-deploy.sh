@@ -1,9 +1,8 @@
-# go to the directory which contains build artifacts and create a *new* Git repo
-# directory may be different based on your particular build process
+# Go to the directory which contains build artifacts and create a *new* Git repo
 cd public
 git init
 
-# inside this git repo we'll pretend to be a new user
+# Inside this git repo we'll pretend to be a new user
 git config user.name "Travis CI"
 git config user.email "travis@example.com"
 
