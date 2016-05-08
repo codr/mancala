@@ -5,6 +5,7 @@
   "main": "index.js",
   "repository": "",
   "scripts": {
+    "build": "env NODE_ENV=production webpack --config ./webpack.config.js --progress --colors",
     "start": "webpack-dev-server --inline --port 8888",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.js'",
     "test:watch": "npm run test -- --watch"
