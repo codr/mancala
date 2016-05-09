@@ -174,4 +174,25 @@ describe('GameState' , () => {
 
   })
 
+  describe('End game capture', () => {
+
+    it('ends correclty', () => {
+      var initialState = {
+        board: [
+          [4, 8, 0, 0, 0, 0, 0],
+          [0, 11, 7, 7, 6, 5, 0]
+        ],
+        turn: 0,
+      }
+      var action = emptyHole(0, 1);
+      var newState = GameState(initialState, action);
+
+      expect( newState.board ).to.eql([
+        [12, 0, 0, 0, 0, 0, 0],
+        [1, 12, 8, 8, 7, 0, 0]
+      ])
+    })
+
+  })
+
 });
