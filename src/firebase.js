@@ -5,11 +5,14 @@ import { FIREBASE_URL } from './config';
 const firebase = new Firebase(FIREBASE_URL);
 
 function firebaseMiddleware({ dispatch, getState }) {
-  firebase.child('moves')
-  .on('child_added', snapshot => {
+  const movesRef = firebase.child('moves');
+
+  movesRef.on('child_added', snapshot => {
     dispatch({...snapshot.val(), firebaseRemoteUpdate: true})
-  }, error => {
-    console.log("The read failed: " + error.code);
+  })
+
+  movesRef.on('child_removed', () => {
+    dispatch({type: 'RESTART_GAME', firebaseRemoteUpdate: true})
   })
 
   return next => action => {
@@ -19,12 +22,11 @@ function firebaseMiddleware({ dispatch, getState }) {
     const returnValue = next(action);
 
     if (!firebaseRemoteUpdate) {
-      firebase.update(getState(), e => e && console.log(e));
+      firebase.update(getState());
       if (action.type === 'RESTART_GAME') {
-        firebase.child('moves').remove()
+        movesRef.remove()
       } else {
-        firebase.child('moves')
-        .push(action)
+        movesRef.push(action)
       }
     }
 
