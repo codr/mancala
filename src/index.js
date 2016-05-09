@@ -5,11 +5,14 @@ import { createStore, applyMiddleware } from 'redux';
 
 import App from './components/app';
 import reducers from './reducers';
+import { firebaseMiddleware } from './firebase';
 
-const createStoreWithMiddleware = applyMiddleware()(createStore);
+const store = applyMiddleware(
+  firebaseMiddleware,
+)(createStore)(reducers);
 
 ReactDOM.render(
-  <Provider store={createStoreWithMiddleware(reducers)}>
+  <Provider store={store}>
     <App />
   </Provider>
   , document.querySelector('.container'));
