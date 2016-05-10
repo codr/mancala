@@ -28,7 +28,10 @@ const addChildren = (dispatch) => {
 function firebaseMiddleware({ dispatch, getState }) {
   const movesRef = firebase.child('moves');
 
-  movesRef.on('child_added', addChildren(dispatch))
+  movesRef.on('child_added', addChildren(dispatch));
+  movesRef.on('child_removed', () => {
+    firebase.child('moves').on('child_added', addChildren(dispatch))
+  })
 
   return next => action => {
     const firebaseRemoteUpdate = action.firebaseRemoteUpdate;
@@ -39,8 +42,7 @@ function firebaseMiddleware({ dispatch, getState }) {
     if (!firebaseRemoteUpdate) {
       firebase.update(getState());
       if (action.type === 'RESTART_GAME') {
-        movesRef.remove()
-        firebase.child('moves').on('child_added', addChildren(dispatch))
+        movesRef.remove();
       }
       movesRef.push(action)
     }
