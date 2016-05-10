@@ -2,7 +2,7 @@ import React from 'react';
 import ClickableHole from '../containers/ClickableHole';
 
 const ActiveHoles = () => (
-  <div>
+  <div style={{direction: 'rtl'}}>
     {ActiveHoles.renderColumn(1)}
     {ActiveHoles.renderColumn(2)}
     {ActiveHoles.renderColumn(3)}
@@ -13,7 +13,7 @@ const ActiveHoles = () => (
 );
 
 ActiveHoles.renderColumn = (column) => (
-  <div className="col-sm-1" style={{textAlign: 'center'}}>
+  <div className="col-sm-1 text-center">
     <ClickableHole
       className="btn btn-default"
       row={0}
