@@ -5,3 +5,15 @@
 .not-allowed {
   cursor: not-allowed;
 }
+
+.bead-container {
+  width: 3em;
+  min-height: 4em;
+  line-height: 0.75em;
+  white-space: pre-line;
+}
+
+.bead-container .glyphicon {
+  transition: transform 1s ease-in-out;
+  z-index: 25;
+}

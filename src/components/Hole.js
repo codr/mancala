@@ -12,6 +12,11 @@ const Hole = ({onClick, className, value, active}) => (
       }
     )}
     onClick={(value !== 0) && active && onClick}>
+    <div className="bead-container">
+      {Array(value).fill().map((u, i) =>
+        <span key={i} className="glyphicon glyphicon-record" />
+      )}
+    </div>
     {value}
   </button>
 );
