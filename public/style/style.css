@@ -25,7 +25,12 @@
 }
 
 @media (max-width: 767px) {
+  .bead-container {
+    width: 6em;
+    min-height: 2em;
+  }
+
   .end-hole .bead-container {
-    width: 8em;
+    width: 14em;
   }
 }
