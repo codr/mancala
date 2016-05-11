@@ -1,6 +1,4 @@
 
-
-
 function cloneOffscreen(parent, child) {
   const clonedParent  = parent.cloneNode(true);
   const clonedChild   = child.cloneNode(true);
@@ -18,7 +16,7 @@ function cloneOffscreen(parent, child) {
 
 function transform(node, deltaX, deltaY, options) {
   const effect = [
-    'all',
+    'transform',
     options.duration + 'ms',
     options.easing,
     options.delay + 'ms',
@@ -44,10 +42,11 @@ function eachChild(node, fn) {
 
 export const animateAppendChild = function(node, options={}) {
 
-  defaultOptions = {
+  const defaultOptions = {
     duration: 1000,
     delay: 0,
-    easing: 'ease-in-out',
+    linger: 0,
+    easing: 'ease-out',
   }
 
   options = Object.assign({}, defaultOptions, options);
@@ -70,16 +69,16 @@ export const animateAppendChild = function(node, options={}) {
   })
 
   const callback = () => {
-    resetTransform(node);
+    options.fakeAppend || resetTransform(node);
     eachChild(this, resetTransform);
-    this.appendChild(node);
+    options.fakeAppend || this.appendChild(node);
   }
 
   return new Promise((resolve) => {
     setTimeout(() => {
-      callback()
-      resolve();
-    }, options.duration + options.delay)
+      callback();
+      requestAnimationFrame(resolve);
+    }, options.duration + options.delay + options.linger)
   })
 
 }

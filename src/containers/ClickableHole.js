@@ -2,13 +2,6 @@ import { connect } from 'react-redux';
 import { emptyHole } from '../actions';
 import Hole from '../components/Hole';
 
-const mapStateToProps = (state, ownProps) => {
-  return {
-    value: state.gameState.board[ownProps.row][ownProps.column],
-    active: state.gameState.turn === ownProps.row,
-  };
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
@@ -18,7 +11,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 const ClickableHole = connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Hole)
 

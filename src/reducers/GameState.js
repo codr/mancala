@@ -1,4 +1,5 @@
 import { EMPTY_HOLE, RESTART_GAME } from '../actions';
+import MoveRecorder from './util/MoveRecorder';
 
 const initialState = {
   board:[
@@ -6,17 +7,24 @@ const initialState = {
     [4, 4, 4, 4, 4, 4, 0]
   ],
   turn: 0,
+  animationSteps: [],
 };
 
 export default function gameState(state = initialState, action) {
   switch (action.type) {
     case EMPTY_HOLE:
       var board = cloneBoard(state.board);
-      var lastPiece = moveHole({board, turn: state.turn}, action.row, action.column);
+      var recorder = new MoveRecorder(action);
+      var lastPiece = moveHole(
+        {board, turn: state.turn},
+        action.row,
+        action.column,
+        recorder.moveBead,
+      );
       var turn = getNextTrun(state, action.row, action.column);
       if (shouldCapture(state, lastPiece))
         capture(board, lastPiece);
-      return {turn, board}
+      return {turn, board, animationSteps: recorder.steps}
     case RESTART_GAME:
       return initialState;
     default:
@@ -28,14 +36,14 @@ function cloneBoard(board) {
   return [board[0].slice(0), board[1].slice(0)];
 }
 
-function moveHole(state, row, column) {
+function moveHole(state, row, column, record) {
   var count = state.board[row][column];
   if (count === 0) return;
   state.board[row][column] = 0;
-  return moveRecursive(state, row, column, count);
+  return moveRecursive(state, row, column, count, record);
 }
 
-function moveRecursive({board, turn}, row, column, count) {
+function moveRecursive({board, turn}, row, column, count, record) {
   if (count === 0) return {row, column};
   if (row === 0) { // move left
     if (column > 0) {
@@ -53,7 +61,8 @@ function moveRecursive({board, turn}, row, column, count) {
     }
   }
   board[row][column]++;
-  return moveRecursive({board, turn}, row, column, count-1);
+  record && record(row, column)
+  return moveRecursive({board, turn}, row, column, count-1, record);
 }
 
 function getNextTrun(state, row, column) {

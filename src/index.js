@@ -5,10 +5,10 @@ import { createStore, applyMiddleware } from 'redux';
 
 import App from './components/app';
 import reducers from './reducers';
-import { firebaseMiddleware } from './firebase';
+// import { firebaseMiddleware } from './firebase';
 
 const store = applyMiddleware(
-  firebaseMiddleware,
+  // firebaseMiddleware,
 )(createStore)(reducers);
 
 ReactDOM.render(

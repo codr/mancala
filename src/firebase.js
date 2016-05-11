@@ -40,7 +40,8 @@ function firebaseMiddleware({ dispatch, getState }) {
     const returnValue = next(action);
 
     if (!firebaseRemoteUpdate) {
-      firebase.update(getState());
+      const {board, turn} = getState().gameState;
+      firebase.child('gameState').update({board, turn});
       if (action.type === 'RESTART_GAME') {
         movesRef.remove();
       }
