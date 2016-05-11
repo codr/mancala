@@ -24,7 +24,7 @@ export const resetGame = () => {
 }
 
 /*
- * ...
+ * Calculated state
  */
 
 const sum = (a,b) => a+b;

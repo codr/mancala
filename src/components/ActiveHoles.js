@@ -13,7 +13,7 @@ const ActiveHoles = () => (
 );
 
 ActiveHoles.renderColumn = (column) => (
-  <div className="col-sm-1 text-center">
+  <div className="col-sm-1 text-center" style={{direction: 'ltr'}}>
     <ClickableHole
       className="btn btn-default"
       row={0}
