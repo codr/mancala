@@ -24,7 +24,6 @@ export default class GameOverModal extends Component {
     return (
       <Modal
         {...props}
-        ref="modal"
         onRequestClose={resetGame}
         style={customStyles}
         >
@@ -35,7 +34,7 @@ export default class GameOverModal extends Component {
             onClick={resetGame}>
             <span>×</span>
           </button>
-          <h4 ref="subtitle" className="modal-title">Game Over</h4>
+          <h4 className="modal-title">Game Over</h4>
         </div>
         <div className="modal-body text-center">
           <h3>Score</h3>

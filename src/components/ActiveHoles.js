@@ -3,17 +3,6 @@ import ClickableHole from '../containers/ClickableHole';
 
 export default class ActiveHoles extends Component {
 
-  constructor (props) {
-    super(props);
-
-    // method bindings
-    this.getBucket = this.getBucket.bind(this);
-  }
-
-  getBucket (row, column) {
-    return this[`bucket${row}${column}`];
-  }
-
   render () {
     return (
       <div style={{direction: 'rtl'}}>
@@ -36,7 +25,7 @@ export default class ActiveHoles extends Component {
 
   renderHole = (row, column) => (
     <ClickableHole
-      setBucketRef={ref => this[`bucket${row}${column}`] = ref}
+      setBucketRef={bucketRef => this.props.setBucketRef(row, column, bucketRef)}
       className="btn btn-default"
       value={this.props.board[row][column]}
       active={this.props.turn === row}

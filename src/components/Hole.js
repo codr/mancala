@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import AnimatedBucket from '../components/AnimatedBucket';
 
 export default class Hole extends Component {
 
   render () {
-    const {onClick, value, active} = this.props;
+    const {onClick, value, active, setBucketRef} = this.props;
     const className = classNames(this.props.className, {
       disabled: !active,
       'btn-primary': active,
@@ -14,11 +15,10 @@ export default class Hole extends Component {
       <button
         className={className}
         onClick={(value !== 0) && active && onClick}>
-        <div ref={this.props.setBucketRef} className="bead-container">
-          {Array(value).fill().map((u, i) =>
-            <span key={i} className="glyphicon glyphicon-record" />
-          )}
-        </div>
+        <AnimatedBucket
+          setBucketRef={setBucketRef}
+          value={value}
+        />
         {value}
       </button>
     );

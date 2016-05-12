@@ -4,9 +4,9 @@ import Board from '../components/Board';
 import { isGameOver, finalScore, resetGame } from '../actions';
 import { animateAppendChild } from '../actions/animate';
 
-const duration = 1500;
-const spacing = 250;
-const linger = 100;
+const DURATION = 1500;
+const SPACING = 250;
+const LINGER = 100;
 
 class AnimatedBoard extends Component {
 
@@ -16,26 +16,32 @@ class AnimatedBoard extends Component {
       delayedProps: props,
     }
 
+    this.buckets = [[],[]];
+
     // method bindings
     this.getBucket = this.getBucket.bind(this);
     this.performAnimationStep = this.performAnimationStep.bind(this);
     this.animateMoveBead = this.animateMoveBead.bind(this);
+    this.setBucketRef = this.setBucketRef.bind(this);
   }
 
   componentWillReceiveProps (nextProps) {
     const {board, animationSteps} = nextProps;
     if (this.props.board !== board) {
       const animations = animationSteps.map(this.performAnimationStep)
-      Promise.all(animations).then(() => this.setState({delayedProps: nextProps}))
+      Promise.all(animations).then(() => {
+        this.setState({delayedProps: nextProps})
+      })
     }
   }
 
   shouldComponentUpdate (nextProps, nextState) {
+    // don't update if props have changed.
     return this.props === nextProps;
   }
 
   getBucket ({row, column}) {
-    return this.refs.board.getBucket(row, column)
+    return this.buckets[row][column];
   }
 
   performAnimationStep (step, i, steps) {
@@ -53,20 +59,24 @@ class AnimatedBoard extends Component {
     return new Promise((resolve) => {
       setTimeout(() => {
         animateAppendChild.call(container, bead, {
-          duration: duration,
-          linger: (steps.length - 1 - i) * spacing + linger,
+          duration: DURATION,
+          linger: LINGER,
           fakeAppend: true
         })
         .then(resolve)
-      }, i * spacing)
+      }, i * SPACING)
     })
+  }
+
+  setBucketRef(row, column, bucket) {
+    this.buckets[row][column] = bucket;
   }
 
   render () {
     return (
       <Board
-        ref="board"
         {...this.state.delayedProps}
+        setBucketRef={this.setBucketRef}
       />
     );
   }

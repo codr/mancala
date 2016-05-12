@@ -68,17 +68,15 @@ export const animateAppendChild = function(node, options={}) {
     transform(child, deltaX, deltaY, options);
   })
 
-  const callback = () => {
+  this.clearAnimation = () => {
     options.fakeAppend || resetTransform(node);
     eachChild(this, resetTransform);
     options.fakeAppend || this.appendChild(node);
+    this.clearAnimation = null;
   }
 
   return new Promise((resolve) => {
-    setTimeout(() => {
-      callback();
-      requestAnimationFrame(resolve);
-    }, options.duration + options.delay + options.linger)
+    setTimeout(resolve, options.duration + options.delay + options.linger)
   })
 
 }
