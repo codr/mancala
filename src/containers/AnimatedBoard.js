@@ -29,7 +29,9 @@ class AnimatedBoard extends Component {
     if (this.props.board !== nextProps.board) {
       this.performAnimations(nextProps)
       .then(() => {
-        this.setState({delayedProps: nextProps})
+        setTimeout(() => {
+          this.setState({delayedProps: nextProps});
+        }, LINGER)
       })
     }
   }
@@ -113,7 +115,6 @@ class AnimatedBoard extends Component {
         setTimeout(() => {
           animateAppendChild.call(destination, bead, {
             duration: DURATION,
-            linger: LINGER,
             fakeAppend: true
           })
           .then(resolve);
