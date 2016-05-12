@@ -31,12 +31,7 @@ function resetTransform(node) {
 }
 
 function eachChild(node, fn) {
-  for (let i in node.children) {
-    if (node.children.hasOwnProperty(i) && i !== 'length') {
-      let child = node.children[i];
-      fn.call(child, child, i);
-    }
-  }
+  Array.prototype.forEach.call(node.children, fn);
 }
 
 
