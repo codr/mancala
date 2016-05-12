@@ -4,9 +4,9 @@ import Board from '../components/Board';
 import { isGameOver, finalScore, resetGame } from '../actions';
 import { animateAppendChild } from '../util/animate';
 
-const DURATION = 500;
-const SPACING = 250;
-const LINGER = 100;
+const DURATION = 500; // time bead takes to animate
+const SPACING = 250; // time between each bead animation
+const LINGER = 100; // time to pause after animation is complete
 
 class AnimatedBoard extends Component {
 
@@ -17,23 +17,16 @@ class AnimatedBoard extends Component {
     }
 
     this.buckets = [[],[]];
+    this.propsQueue = [];
 
     // method bindings
-    this.getBucket = this.getBucket.bind(this);
-    this.animateMoveBead = this.animateMoveBead.bind(this);
-    this.animateCapture = this.animateCapture.bind(this);
+    this.processProps = this.processProps.bind(this);
     this.setBucketRef = this.setBucketRef.bind(this);
   }
 
   componentWillReceiveProps (nextProps) {
-    const {animationSteps, ...delayedProps} = nextProps;
     if (this.props.board !== nextProps.board) {
-      this.performAnimations(animationSteps)
-      .then(() => {
-        setTimeout(() => {
-          this.setState({delayedProps});
-        }, LINGER)
-      })
+      this.throttleProps(nextProps, this.processProps);
     }
   }
 
@@ -42,15 +35,42 @@ class AnimatedBoard extends Component {
     return this.props === nextProps;
   }
 
-  getBucket ({row, column}) {
-    return this.buckets[row][column];
+  throttleProps (props, fn) {
+    if (this.processingProps) {
+      this.propsQueue.push(props);
+    } else {
+      this.processingProps = true;
+      fn(props)
+      .then(() => {
+        this.processingProps = false;
+        const nextProps = this.propsQueue.shift();
+        nextProps && this.throttleProps(nextProps, fn);
+      })
+    }
+  }
+
+  processProps (nextProps) {
+    const {animationSteps, ...delayedProps} = nextProps;
+    return this.performAnimations(animationSteps)
+    .then(() =>
+      this.setDelayedPropsAfter(delayedProps, LINGER)
+    )
+  }
+
+  setDelayedPropsAfter(delayedProps, wait) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.setState({delayedProps});
+        resolve();
+      }, wait)
+    });
   }
 
   performAnimations (animationSteps) {
     const moves = animationSteps.filter(a => a.type === 'MOVE_BEAD');
     const capture = animationSteps.find(a => a.type === 'CAPTURE_HOLE');
 
-    const animateMoves = moves.map(this.animateMoveBead);
+    const animateMoves = moves.map(this.animateMoveBead, this);
 
     return Promise.all(animateMoves)
     .then(movedBeads => movedBeads[movedBeads.length-1])
@@ -124,6 +144,10 @@ class AnimatedBoard extends Component {
     )
 
     return Promise.all(animations);
+  }
+
+  getBucket ({row, column}) {
+    return this.buckets[row][column];
   }
 
   setBucketRef(row, column, bucket) {
