@@ -68,6 +68,9 @@ export const animateAppendChild = function(node, options={}) {
     transform(child, deltaX, deltaY, options);
   })
 
+  //clean up
+  clonedParent.remove();
+
   this.clearAnimation = () => {
     options.fakeAppend || resetTransform(node);
     eachChild(this, resetTransform);
