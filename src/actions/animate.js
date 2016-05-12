@@ -65,7 +65,11 @@ export const animateAppendChild = function(node, options={}) {
     let childRect = child.getBoundingClientRect();
     deltaX = parentRect.left + clonedParent.children[i].offsetLeft - childRect.left;
     deltaY = parentRect.top + clonedParent.children[i].offsetTop - childRect.top;
-    transform(child, deltaX, deltaY, options);
+    transform(child, deltaX, deltaY, {
+      ...options,
+      duration: options.duration/4,
+      delay: options.delay + (options.duration * 3 / 4),
+    });
   })
 
   //clean up
