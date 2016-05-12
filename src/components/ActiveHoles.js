@@ -5,7 +5,7 @@ export default class ActiveHoles extends Component {
 
   render () {
     return (
-      <div style={{direction: 'rtl'}}>
+      <div>
         {this.renderColumn(1)}
         {this.renderColumn(2)}
         {this.renderColumn(3)}
@@ -17,7 +17,7 @@ export default class ActiveHoles extends Component {
   }
 
   renderColumn = (column) => (
-    <div className="col-sm-1 text-center" style={{direction: 'ltr'}}>
+    <div className="col-sm-1 text-center" style={{direction: 'rtl'}}>
       {this.renderHole(0, column)}
       {this.renderHole(1, column-1)}
     </div>
@@ -27,6 +27,7 @@ export default class ActiveHoles extends Component {
     <ClickableHole
       setBucketRef={bucketRef => this.props.setBucketRef(row, column, bucketRef)}
       className="btn btn-default"
+      style={{direction: 'ltr'}}
       value={this.props.board[row][column]}
       active={this.props.turn === row}
       row={row}
