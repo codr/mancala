@@ -12,16 +12,15 @@ function cloneOffscreen(parent, child) {
     parent.animationClone = clonedParent;
   }
 
-  clonedParent.style.cssText = getComputedStyle(parent).cssText;
   clonedParent.style.position = 'absolute';
   clonedParent.style.top = '-1000px';
   clonedParent.style.left = '-1000px';
 
   const beforeParent = clonedParent.cloneNode(true);
-  document.body.appendChild(beforeParent);
+  parent.parentNode.appendChild(beforeParent);
 
   clonedParent.appendChild(clonedChild);
-  document.body.appendChild(clonedParent);
+  parent.parentNode.appendChild(clonedParent);
 
   return {beforeParent, clonedParent, clonedChild};
 }

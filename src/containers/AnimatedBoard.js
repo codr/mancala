@@ -26,11 +26,12 @@ class AnimatedBoard extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
+    const {animationSteps, ...delayedProps} = nextProps;
     if (this.props.board !== nextProps.board) {
-      this.performAnimations(nextProps)
+      this.performAnimations(animationSteps)
       .then(() => {
         setTimeout(() => {
-          this.setState({delayedProps: nextProps});
+          this.setState({delayedProps});
         }, LINGER)
       })
     }
@@ -45,8 +46,7 @@ class AnimatedBoard extends Component {
     return this.buckets[row][column];
   }
 
-  performAnimations (nextProps) {
-    const {animationSteps} = nextProps;
+  performAnimations (animationSteps) {
     const moves = animationSteps.filter(a => a.type === 'MOVE_BEAD');
     const capture = animationSteps.find(a => a.type === 'CAPTURE_HOLE');
 
@@ -71,6 +71,7 @@ class AnimatedBoard extends Component {
       setTimeout(() => {
         animateAppendChild.call(destination, bead, {
           duration: DURATION,
+          delay: 100,
           fakeAppend: true
         })
         .then(() => resolve(bead))
