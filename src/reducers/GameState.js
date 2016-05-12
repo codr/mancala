@@ -1,5 +1,5 @@
 import { EMPTY_HOLE, RESTART_GAME } from '../actions';
-import MoveRecorder from './util/MoveRecorder';
+import MoveRecorder from '../util/MoveRecorder';
 
 const initialState = {
   board:[

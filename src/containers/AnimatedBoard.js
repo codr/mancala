@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Board from '../components/Board';
 import { isGameOver, finalScore, resetGame } from '../actions';
-import { animateAppendChild } from '../actions/animate';
+import { animateAppendChild } from '../util/animate';
 
 const DURATION = 500;
 const SPACING = 250;
