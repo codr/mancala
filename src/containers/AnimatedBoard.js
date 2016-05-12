@@ -4,7 +4,7 @@ import Board from '../components/Board';
 import { isGameOver, finalScore, resetGame } from '../actions';
 import { animateAppendChild } from '../actions/animate';
 
-const DURATION = 1500;
+const DURATION = 500;
 const SPACING = 250;
 const LINGER = 100;
 
@@ -20,16 +20,15 @@ class AnimatedBoard extends Component {
 
     // method bindings
     this.getBucket = this.getBucket.bind(this);
-    this.performAnimationStep = this.performAnimationStep.bind(this);
     this.animateMoveBead = this.animateMoveBead.bind(this);
+    this.animateCapture = this.animateCapture.bind(this);
     this.setBucketRef = this.setBucketRef.bind(this);
   }
 
   componentWillReceiveProps (nextProps) {
-    const {board, animationSteps} = nextProps;
-    if (this.props.board !== board) {
-      const animations = animationSteps.map(this.performAnimationStep)
-      Promise.all(animations).then(() => {
+    if (this.props.board !== nextProps.board) {
+      this.performAnimations(nextProps)
+      .then(() => {
         this.setState({delayedProps: nextProps})
       })
     }
@@ -44,28 +43,85 @@ class AnimatedBoard extends Component {
     return this.buckets[row][column];
   }
 
-  performAnimationStep (step, i, steps) {
-    if (step.type === 'MOVE_BEAD') {
-      return this.animateMoveBead(step, i, steps);
-    }
+  performAnimations (nextProps) {
+    const {animationSteps} = nextProps;
+    const moves = animationSteps.filter(a => a.type === 'MOVE_BEAD');
+    const capture = animationSteps.find(a => a.type === 'CAPTURE_HOLE');
+
+    const animateMoves = moves.map(this.animateMoveBead);
+
+    return Promise.all(animateMoves)
+    .then(movedBeads => movedBeads[movedBeads.length-1])
+    .then(lastMovedBead => {
+      return capture && this.animateCapture(capture, lastMovedBead);
+    })
   }
 
-  animateMoveBead (step, i, steps) {
-    const {start, end} = step;
-    const container = this.getBucket(end);
-    const bead = this.getBucket(start).children[i];
+  animateMoveBead (step) {
+    const {start, end, index} = step;
+    const destination = this.getBucket(end);
+    const origin = this.getBucket(start);
+    const invertedIndex = origin.children.length - 1 - index;
+    const bead = origin.children[invertedIndex];
     bead.style.color = 'red';
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        animateAppendChild.call(container, bead, {
+        animateAppendChild.call(destination, bead, {
           duration: DURATION,
-          linger: LINGER,
           fakeAppend: true
         })
-        .then(resolve)
-      }, i * SPACING)
+        .then(() => resolve(bead))
+      }, invertedIndex * SPACING)
     })
+  }
+
+  animateCapture (step, lastMovedBead) {
+    const {hole} = step;
+    const scoreBucket = this.getBucket(hole);
+    let destination;
+    let capturedBucket;
+    if (hole.row === 0){
+      destination = this.getBucket({
+        row: 0,
+        column: 0
+      });
+      capturedBucket = this.getBucket({
+        row: 1,
+        column: hole.column-1,
+      })
+    } else {
+      destination = this.getBucket({
+        row: 1,
+        column: this.props.board[1].length-1,
+      });
+      capturedBucket = this.getBucket({
+        row: 0,
+        column: hole.column+1,
+      })
+    }
+
+    const beads = [
+      lastMovedBead,
+      ...scoreBucket.children,
+      ...capturedBucket.children,
+    ]
+
+    const animations = Array.prototype.map.call(beads, (bead, index) =>
+      new Promise(resolve => {
+        bead.style.color = 'green';
+        setTimeout(() => {
+          animateAppendChild.call(destination, bead, {
+            duration: DURATION,
+            linger: LINGER,
+            fakeAppend: true
+          })
+          .then(resolve);
+        }, index * SPACING);
+      })
+    )
+
+    return Promise.all(animations);
   }
 
   setBucketRef(row, column, bucket) {

@@ -22,8 +22,10 @@ export default function gameState(state = initialState, action) {
         recorder.moveBead,
       );
       var turn = getNextTrun(state, action.row, action.column);
-      if (shouldCapture(state, lastPiece))
+      if (shouldCapture(state, lastPiece)) {
         capture(board, lastPiece);
+        recorder.capture(lastPiece)
+      }
       return {turn, board, animationSteps: recorder.steps}
     case RESTART_GAME:
       return initialState;
@@ -61,7 +63,7 @@ function moveRecursive({board, turn}, row, column, count, record) {
     }
   }
   board[row][column]++;
-  record && record(row, column)
+  record && record(row, column, count-1)
   return moveRecursive({board, turn}, row, column, count-1, record);
 }
 

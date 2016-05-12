@@ -1,17 +1,37 @@
 
 function cloneOffscreen(parent, child) {
-  const clonedParent  = parent.cloneNode(true);
-  const clonedChild   = child.cloneNode(true);
+
+  const clonedChild = child.cloneNode(true);
+  clonedChild.animatingNode = child;
+
+  let clonedParent;
+  if (parent.animationClone) {
+    clonedParent = parent.animationClone;
+  } else {
+    clonedParent = parent.cloneNode(true);
+    parent.animationClone = clonedParent;
+  }
 
   clonedParent.style.cssText = getComputedStyle(parent).cssText;
   clonedParent.style.position = 'absolute';
   clonedParent.style.top = '-1000px';
   clonedParent.style.left = '-1000px';
 
+  const beforeParent = clonedParent.cloneNode(true);
+  document.body.appendChild(beforeParent);
+
   clonedParent.appendChild(clonedChild);
   document.body.appendChild(clonedParent);
 
-  return {clonedParent, clonedChild};
+  return {beforeParent, clonedParent, clonedChild};
+}
+
+function getShiftOfChild(beforeParent, afterParent, index) {
+  const beforeChild = beforeParent.children[index];
+  const afterChild = afterParent.children[index];
+  const deltaX = afterChild.offsetLeft - beforeChild.offsetLeft;
+  const deltaY = afterChild.offsetTop - beforeChild.offsetTop;
+  return {deltaX, deltaY};
 }
 
 function transform(node, deltaX, deltaY, options) {
@@ -21,7 +41,19 @@ function transform(node, deltaX, deltaY, options) {
     options.easing,
     options.delay + 'ms',
   ].join(' ');
+
   node.style.transition = effect;
+  addTranlate(node, deltaX, deltaY);
+}
+
+function addTranlate(node, deltaX, deltaY) {
+  if (deltaX === 0 && deltaY === 0) return;
+  const transform = node.style.transform;
+  const match = transform.match(/translate\((.*)px, (.*)px\)/)
+  if (match) {
+    deltaX += parseInt(match[1]);
+    deltaY += parseInt(match[2]);
+  }
   node.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 }
 
@@ -43,23 +75,20 @@ export const animateAppendChild = function(node, options={}) {
     linger: 0,
     easing: 'ease-out',
   }
-
   options = Object.assign({}, defaultOptions, options);
 
-  const {clonedParent, clonedChild} = cloneOffscreen(this, node);
-
+  const {beforeParent, clonedParent, clonedChild} = cloneOffscreen(this, node);
   const startRect   = node.getBoundingClientRect();
   const parentRect  = this.getBoundingClientRect();
 
+  // move the node to it's destination
   let deltaX = parentRect.left + clonedChild.offsetLeft - startRect.left;
   let deltaY = parentRect.top + clonedChild.offsetTop - startRect.top;
-
   transform(node, deltaX, deltaY, options);
 
+  // move existing sibilings
   eachChild(this, (child, i) => {
-    let childRect = child.getBoundingClientRect();
-    deltaX = parentRect.left + clonedParent.children[i].offsetLeft - childRect.left;
-    deltaY = parentRect.top + clonedParent.children[i].offsetTop - childRect.top;
+    const {deltaX, deltaY} = getShiftOfChild(beforeParent, clonedParent, i);
     transform(child, deltaX, deltaY, {
       ...options,
       duration: options.duration/4,
@@ -67,14 +96,26 @@ export const animateAppendChild = function(node, options={}) {
     });
   })
 
-  //clean up
-  clonedParent.remove();
+  // direct animating nodes to their resting destation.
+  eachChild(clonedParent, (child, i) => {
+    if (child === clonedChild) return;
+    if (!child.animatingNode) return;
+    const {deltaX, deltaY} = getShiftOfChild(beforeParent, clonedParent, i);
+    addTranlate(child.animatingNode, deltaX, deltaY);
+  })
+
+  beforeParent.remove();
 
   this.clearAnimation = () => {
+    //clean up
+    clonedParent.remove();
+    delete this.animationClone;
+
     options.fakeAppend || resetTransform(node);
     eachChild(this, resetTransform);
     options.fakeAppend || this.appendChild(node);
-    this.clearAnimation = null;
+
+    delete this.clearAnimation;
   }
 
   return new Promise((resolve) => {
