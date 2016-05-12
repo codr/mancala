@@ -89,10 +89,12 @@ export const animateAppendChild = function(node, options={}) {
   // move existing sibilings
   eachChild(this, (child, i) => {
     const {deltaX, deltaY} = getShiftOfChild(beforeParent, clonedParent, i);
+    const delay = options.delay + (options.duration / 2);
+    const alreadyTransformed = !!child.style.transform;
     transform(child, deltaX, deltaY, {
       ...options,
-      duration: options.duration/4,
-      delay: options.delay + (options.duration * 3 / 4),
+      duration: alreadyTransformed ? options.duration : options.duration/2,
+      delay: alreadyTransformed ? 0 : delay,
     });
   })
 
