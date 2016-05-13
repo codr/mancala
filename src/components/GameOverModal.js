@@ -37,7 +37,7 @@ export default class GameOverModal extends Component {
           <h4 className="modal-title">Game Over</h4>
         </div>
         <div className="modal-body text-center">
-          <h3>Score</h3>
+          <h3>{`Player ${score.indexOf(Math.max(...score)) + 1} wins!`}</h3>
           <div className="row">
             <h4 className="col-xs-6">Player 1</h4>
             <h4 className="col-xs-6">Player 2</h4>
@@ -45,9 +45,6 @@ export default class GameOverModal extends Component {
           <div className="row">
             <div className="col-xs-6">{score[0]}</div>
             <div className="col-xs-6">{score[1]}</div>
-          </div>
-          <div>
-            {`Player ${score.indexOf(Math.max(...score)) + 1} wins!`}
           </div>
         </div>
       </Modal>
