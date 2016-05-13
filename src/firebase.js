@@ -4,7 +4,7 @@ import { FIREBASE_URL } from './config';
 
 const firebase = new Firebase(FIREBASE_URL);
 
-const addChildren = dispatch => {
+const childAddedQueue = dispatch => {
   // Apply each move in order.
   // This will queue any snapshots that arrive out
   // of order. Then process them once the correct ones
@@ -17,7 +17,7 @@ const addChildren = dispatch => {
       do {
         delete queuedSnapshots[lastKey];
         lastKey = snapshot.key();
-        dispatch({...snapshot.val(), firebaseUpdate: true})
+        dispatch({...snapshot.val(), firebaseUpdate: true});
       } while (snapshot = queuedSnapshots[lastKey]);
     } else {
       queuedSnapshots[prevSnapKey] = snapshot;
@@ -25,13 +25,19 @@ const addChildren = dispatch => {
   }
 }
 
+const resetMoves = dispatch => {
+  // Remove the listener then add it again
+  // to reset it's state.
+  const movesRef = firebase.child('moves');
+  movesRef.off('child_added');
+  movesRef.remove();
+  movesRef.on('child_added', childAddedQueue(dispatch));
+}
+
 function firebaseMiddleware({ dispatch, getState }) {
   const movesRef = firebase.child('moves');
 
-  movesRef.on('child_added', addChildren(dispatch));
-  movesRef.on('child_removed', () => {
-    firebase.child('moves').on('child_added', addChildren(dispatch))
-  })
+  movesRef.on('child_added', childAddedQueue(dispatch));
 
   return next => action => {
     const firebaseUpdate = action.firebaseUpdate;
@@ -47,10 +53,9 @@ function firebaseMiddleware({ dispatch, getState }) {
     } else {
       // Don't generate a new state here. Instead allow
       // firebase to dispatch the action.
-      if (action.type === 'RESTART_GAME') {
-        movesRef.remove();
-      }
-      movesRef.push(action)
+      if (action.type === 'RESTART_GAME')
+        resetMoves(dispatch);
+      movesRef.push(action);
     }
 
   }
