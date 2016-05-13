@@ -26,7 +26,11 @@ export default function gameState(state = initialState, action) {
         capture(board, lastPiece);
         recorder.capture(lastPiece)
       }
-      return {turn, board, animationSteps: recorder.steps}
+      return {
+        turn,
+        board,
+        animationSteps: action.skipAnimation ? [] : recorder.steps
+      }
     case RESTART_GAME:
       return initialState;
     default:

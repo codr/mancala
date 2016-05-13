@@ -53,17 +53,8 @@ class AnimatedBoard extends Component {
     const {animationSteps, ...delayedProps} = nextProps;
     return this.performAnimations(animationSteps)
     .then(() =>
-      this.setDelayedPropsAfter(delayedProps, LINGER)
+      this.setState({delayedProps})
     )
-  }
-
-  setDelayedPropsAfter(delayedProps, wait) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        this.setState({delayedProps});
-        resolve();
-      }, wait)
-    });
   }
 
   performAnimations (animationSteps) {
@@ -77,6 +68,12 @@ class AnimatedBoard extends Component {
     .then(lastMovedBead => {
       return capture && this.animateCapture(capture, lastMovedBead);
     })
+    .then(() => new Promise(resolve => {
+      if(animationSteps.length)
+        setTimeout(resolve, LINGER)
+      else
+        resolve();
+    }))
   }
 
   animateMoveBead (step) {

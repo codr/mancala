@@ -34,7 +34,7 @@ const resetMoves = dispatch => {
   movesRef.on('child_added', childAddedQueue(dispatch));
 }
 
-function firebaseMiddleware({ dispatch, getState }) {
+export function firebaseMiddleware({ dispatch, getState }) {
   const movesRef = firebase.child('moves');
 
   movesRef.on('child_added', childAddedQueue(dispatch));
@@ -61,4 +61,24 @@ function firebaseMiddleware({ dispatch, getState }) {
   }
 }
 
-export { firebaseMiddleware }
+export function skipPreviousAnimations ({dispatch, getState}) {
+  let skipCount = 6;
+
+  const prom = new Promise(resolve => {
+    firebase.child('moves').once('value', snapshot => {
+      skipCount = Object.keys(snapshot.val()).length;
+      resolve();
+    })
+  })
+
+  return next => action => {
+    prom.then(() => {
+      if (skipCount > 0) {
+        action.skipAnimation = true;
+        skipCount--;
+      }
+
+      next(action);
+    })
+  }
+}
