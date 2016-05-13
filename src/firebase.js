@@ -37,10 +37,7 @@ const resetMoves = dispatch => {
 export function firebaseMiddleware({ dispatch, getState }) {
   const movesRef = firebase.child('moves');
 
-  firebase.on('child_added', snapshot => {
-    if (snapshot.key() === 'moves')
-      firebase.child('moves').on('child_added', childAddedQueue(dispatch));
-  })
+  movesRef.on('child_added', childAddedQueue(dispatch));
 
   return next => action => {
     const firebaseUpdate = action.firebaseUpdate;
