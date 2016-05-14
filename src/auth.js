@@ -14,24 +14,17 @@ rootRef.onAuth(authData => {
   });
 });
 
-function getAuthData() {
-  return new Promise(resolve => {
-    rootRef.onAuth(resolve);
+export function getPlayerNumber(cb) {
+  return rootRef.onAuth(authData => {
+    rootRef
+    .child('players')
+    .child(authData.uid)
+    .on('value', snapshot => {
+      if (snapshot.val())
+        return cb(snapshot.val().playerNumber);
+      cb(-1);
+    });
   });
-}
-
-export function getPlayerNumber() {
-  return getAuthData()
-    .then(authData => new Promise((resolve, reject) => {
-      rootRef
-      .child('players')
-      .child(authData.uid)
-      .on('value', snapshot => {
-        if (snapshot.val())
-          return resolve(snapshot.val().playerNumber);
-        reject();
-      });
-    }));
 }
 
 const user = rootRef.getAuth();

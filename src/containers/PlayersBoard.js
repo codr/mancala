@@ -19,8 +19,7 @@ class PlayersBoard extends Component {
   }
 
   componentDidMount () {
-    getPlayerNumber()
-    .then(playerNumber => {
+    getPlayerNumber(playerNumber => {
       this.setState({playerNumber});
     });
   }
