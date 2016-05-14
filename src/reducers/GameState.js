@@ -3,8 +3,8 @@ import MoveRecorder from '../util/MoveRecorder';
 
 const initialState = {
   board:[
-    [0, 4, 4, 4, 4, 4, 4],
-    [4, 4, 4, 4, 4, 4, 0]
+    [0, 8, 4, 4, 4, 4, 4],
+    [4, 4, 4, 4, 4, 4, 0],
   ],
   turn: 0,
   animationSteps: [],
@@ -19,22 +19,22 @@ export default function gameState(state = initialState, action) {
         {board, turn: state.turn},
         action.row,
         action.column,
-        recorder.moveBead,
+        recorder.moveBead
       );
       var turn = getNextTrun(state, action.row, action.column);
       if (shouldCapture(state, lastPiece)) {
         capture(board, lastPiece);
-        recorder.capture(lastPiece)
+        recorder.capture(lastPiece);
       }
       return {
         turn,
         board,
-        animationSteps: action.skipAnimation ? [] : recorder.steps
-      }
+        animationSteps: action.skipAnimation ? [] : recorder.steps,
+      };
     case RESTART_GAME:
       return initialState;
     default:
-      return state
+      return state;
   }
 }
 
@@ -67,7 +67,7 @@ function moveRecursive({board, turn}, row, column, count, record) {
     }
   }
   board[row][column]++;
-  record && record(row, column, count-1)
+  record && record(row, column, count-1);
   return moveRecursive({board, turn}, row, column, count-1, record);
 }
 

@@ -9,7 +9,7 @@ import { firebaseMiddleware, skipPreviousAnimations } from './firebase';
 
 const store = applyMiddleware(
   firebaseMiddleware,
-  skipPreviousAnimations,
+  skipPreviousAnimations
 )(createStore)(reducers);
 
 ReactDOM.render(

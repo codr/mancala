@@ -7,7 +7,7 @@ export default class Board extends Component {
 
   render () {
     const { turn, board, isGameOver, finalScore,
-      resetGame, setBucketRef } = this.props;
+      resetGame, setBucketRef, onHoleClick } = this.props;
     return (
       <div className="row">
         <EndHole
@@ -15,7 +15,12 @@ export default class Board extends Component {
           value={board[0][0]}
           setBucketRef={bucketRef => setBucketRef(0, 0, bucketRef)}
         />
-        <ActiveHoles board={board} turn={turn} setBucketRef={setBucketRef} />
+        <ActiveHoles
+          board={board}
+          turn={turn}
+          setBucketRef={setBucketRef}
+          onHoleClick={onHoleClick}
+        />
         <EndHole
           className="col-sm-1 text-center"
           value={board[1][board[1].length-1]}

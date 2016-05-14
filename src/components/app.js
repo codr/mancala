@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import AnimatedBoard from '../containers/AnimatedBoard';
+import PlayersBoard from '../containers/PlayersBoard';
 
 export default class App extends Component {
   render() {
     return (
-      <AnimatedBoard />
+      <PlayersBoard />
     );
   }
 }

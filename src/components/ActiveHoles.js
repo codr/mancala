@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ClickableHole from '../containers/ClickableHole';
+import Hole from '../components/Hole';
 
 export default class ActiveHoles extends Component {
 
@@ -16,23 +16,27 @@ export default class ActiveHoles extends Component {
     );
   }
 
-  renderColumn = (column) => (
-    <div className="col-sm-1 text-center" style={{direction: 'rtl'}}>
-      {this.renderHole(0, column)}
-      {this.renderHole(1, column-1)}
-    </div>
-  );
+  renderColumn (column) {
+    return (
+      <div className="col-sm-1 text-center" style={{direction: 'rtl'}}>
+        {this.renderHole(0, column)}
+        {this.renderHole(1, column-1)}
+      </div>
+    );
+  }
 
-  renderHole = (row, column) => (
-    <ClickableHole
-      setBucketRef={bucketRef => this.props.setBucketRef(row, column, bucketRef)}
-      className="btn btn-default"
-      style={{direction: 'ltr'}}
-      value={this.props.board[row][column]}
-      active={this.props.turn === row}
-      row={row}
-      column={column}
-    />
-  );
+  renderHole (row, column) {
+    const {setBucketRef, board, turn, onHoleClick} = this.props;
+    return (
+      <Hole
+        setBucketRef={bucketRef => setBucketRef(row, column, bucketRef)}
+        className="btn btn-default"
+        style={{direction: 'ltr'}}
+        value={board[row][column]}
+        active={turn === row}
+        onClick={() => onHoleClick(row, column)}
+      />
+    );
+  }
 
 }

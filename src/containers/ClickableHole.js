@@ -5,14 +5,15 @@ import Hole from '../components/Hole';
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     onClick: () => {
-      dispatch(emptyHole(ownProps.row, ownProps.column));
-    }
+      const {row, column} = ownProps.getRealHole(ownProps.row, ownProps.column);
+      dispatch(emptyHole(row, column));
+    },
   };
-}
+};
 
 const ClickableHole = connect(
   null,
-  mapDispatchToProps,
-)(Hole)
+  mapDispatchToProps
+)(Hole);
 
-export default ClickableHole
+export default ClickableHole;

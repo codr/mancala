@@ -14,7 +14,7 @@ describe('GameState' , () => {
 
       expect( newState.board ).to.eql([
         [0, 4, 4, 4, 4, 4, 4],
-        [4, 4, 4, 4, 4, 4, 0]
+        [4, 4, 4, 4, 4, 4, 0],
       ]);
     });
 
@@ -26,7 +26,7 @@ describe('GameState' , () => {
 
       expect( newState.board ).to.eql([
         [1, 5, 5, 5, 0, 4, 4],
-        [4, 4, 4, 4, 4, 4, 0]
+        [4, 4, 4, 4, 4, 4, 0],
       ]);
     });
 
@@ -38,7 +38,7 @@ describe('GameState' , () => {
 
       expect( newState.board ).to.eql([
         [0, 4, 4, 5, 5, 5, 5],
-        [4, 4, 4, 4, 4, 0, 0]
+        [4, 4, 4, 4, 4, 0, 0],
       ]);
     });
 
@@ -55,7 +55,7 @@ describe('GameState' , () => {
 
       expect( newState.board ).to.eql([
         [1, 3, 3, 3, 3, 3, 3],
-        [5, 5, 5, 5, 2, 1, 2]
+        [5, 5, 5, 5, 2, 1, 2],
       ]);
     });
 
@@ -63,18 +63,18 @@ describe('GameState' , () => {
       var initialState = {
         board: [
           [6, 10, 4, 4, 0, 2, 1],
-          [9, 1, 0, 6, 0, 0, 5]
+          [9, 1, 0, 6, 0, 0, 5],
         ],
         turn: 1,
-      }
+      };
       var action = emptyHole(1, 1);
 
       var newState = GameState(initialState, action);
 
       expect( newState.board ).to.eql([
         [6, 10, 4, 0, 0, 2, 1],
-        [9, 0, 0, 6, 0, 0, 10]
-      ])
+        [9, 0, 0, 6, 0, 0, 10],
+      ]);
     });
 
   });
@@ -88,14 +88,14 @@ describe('GameState' , () => {
         initialState = {
           board: [
             [0, 1, 4, 3, 4, 5, 6],
-            [6, 5, 4, 3, 2, 1, 0]
+            [6, 5, 4, 3, 2, 1, 0],
           ],
           turn: 0,
         };
       });
 
       it('does not change turn if last bead is on end', () => {
-        var action = emptyHole(0, 4)
+        var action = emptyHole(0, 4);
 
         var newState = GameState(initialState, action);
 
@@ -103,7 +103,7 @@ describe('GameState' , () => {
       });
 
       it('does change turn if last bead is on a normal hole', () => {
-        var action = emptyHole(0, 2)
+        var action = emptyHole(0, 2);
 
         var newState = GameState(initialState, action);
 
@@ -119,14 +119,14 @@ describe('GameState' , () => {
         initialState = {
           board: [
             [0, 1, 2, 3, 4, 5, 6],
-            [6, 5, 4, 3, 2, 2, 0]
+            [6, 5, 4, 3, 2, 2, 0],
           ],
           turn: 1,
         };
       });
 
       it('does not change turn if last bead is on end', () => {
-        var action = emptyHole(1, 3)
+        var action = emptyHole(1, 3);
 
         var newState = GameState(initialState, action);
 
@@ -135,7 +135,7 @@ describe('GameState' , () => {
 
 
       it('does change turn if last bead is on a normal hole', () => {
-        var action = emptyHole(1, 5)
+        var action = emptyHole(1, 5);
 
         var newState = GameState(initialState, action);
 
@@ -153,26 +153,26 @@ describe('GameState' , () => {
       var initialState = {
         board: [
           [6, 10, 4, 4, 0, 2, 1],
-          [9, 1, 0, 6, 0, 0, 5]
+          [9, 1, 0, 6, 0, 0, 5],
         ],
         turn: 1,
-      }
+      };
       var action = emptyHole(1, 2);
       newState = GameState(initialState, action);
-    })
+    });
 
     it('doesn\'t change the board', () => {
       expect( newState.board ).to.eql([
         [6, 10, 4, 4, 0, 2, 1],
-        [9, 1, 0, 6, 0, 0, 5]
-      ])
+        [9, 1, 0, 6, 0, 0, 5],
+      ]);
     });
 
     it('doesn\'t change the turn', () => {
-      expect( newState.turn ).to.eql(1)
-    })
+      expect( newState.turn ).to.eql(1);
+    });
 
-  })
+  });
 
   describe('End game capture', () => {
 
@@ -180,19 +180,19 @@ describe('GameState' , () => {
       var initialState = {
         board: [
           [4, 8, 0, 0, 0, 0, 0],
-          [0, 11, 7, 7, 6, 5, 0]
+          [0, 11, 7, 7, 6, 5, 0],
         ],
         turn: 0,
-      }
+      };
       var action = emptyHole(0, 1);
       var newState = GameState(initialState, action);
 
       expect( newState.board ).to.eql([
         [12, 0, 0, 0, 0, 0, 0],
-        [1, 12, 8, 8, 7, 0, 0]
-      ])
-    })
+        [1, 12, 8, 8, 7, 0, 0],
+      ]);
+    });
 
-  })
+  });
 
 });

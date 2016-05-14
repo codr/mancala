@@ -15,13 +15,13 @@ export default class MoveRecorder {
       start: this.origin,
       end: {row, column},
       index,
-    })
+    });
   }
 
   capture (hole) {
     this.steps.push({
       type: 'CAPTURE_HOLE',
       hole,
-    })
+    });
   }
 }

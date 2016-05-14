@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Board from '../components/Board';
-import { isGameOver, finalScore, resetGame } from '../actions';
 import { animateAppendChild } from '../util/animate';
 
 const DURATION = 500; // time bead takes to animate
 const SPACING = 250; // time between each bead animation
 const LINGER = 100; // time to pause after animation is complete
 
-class AnimatedBoard extends Component {
+export default class AnimatedBoard extends Component {
 
   constructor (props) {
-    super(props)
+    super(props);
     this.state = {
       delayedProps: props,
-    }
+    };
 
     this.buckets = [[],[]];
     this.propsQueue = [];
@@ -30,7 +28,7 @@ class AnimatedBoard extends Component {
     }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate (nextProps) {
     // don't update if props have changed.
     return this.props === nextProps;
   }
@@ -45,7 +43,7 @@ class AnimatedBoard extends Component {
         this.processingProps = false;
         const nextProps = this.propsQueue.shift();
         nextProps && this.throttleProps(nextProps, fn);
-      })
+      });
     }
   }
 
@@ -54,7 +52,7 @@ class AnimatedBoard extends Component {
     return this.performAnimations(animationSteps)
     .then(() =>
       this.setState({delayedProps})
-    )
+    );
   }
 
   performAnimations (animationSteps) {
@@ -70,10 +68,10 @@ class AnimatedBoard extends Component {
     })
     .then(() => new Promise(resolve => {
       if(animationSteps.length)
-        setTimeout(resolve, LINGER)
+        setTimeout(resolve, LINGER);
       else
         resolve();
-    }))
+    }));
   }
 
   animateMoveBead (step) {
@@ -89,11 +87,11 @@ class AnimatedBoard extends Component {
         animateAppendChild.call(destination, bead, {
           duration: DURATION,
           delay: 100,
-          fakeAppend: true
+          fakeAppend: true,
         })
-        .then(() => resolve(bead))
-      }, invertedIndex * SPACING)
-    })
+        .then(() => resolve(bead));
+      }, invertedIndex * SPACING);
+    });
   }
 
   animateCapture (step, lastMovedBead) {
@@ -104,12 +102,12 @@ class AnimatedBoard extends Component {
     if (hole.row === 0){
       destination = this.getBucket({
         row: 0,
-        column: 0
+        column: 0,
       });
       capturedBucket = this.getBucket({
         row: 1,
         column: hole.column-1,
-      })
+      });
     } else {
       destination = this.getBucket({
         row: 1,
@@ -118,14 +116,14 @@ class AnimatedBoard extends Component {
       capturedBucket = this.getBucket({
         row: 0,
         column: hole.column+1,
-      })
+      });
     }
 
     const beads = [
       lastMovedBead,
       ...scoreBucket.children,
       ...capturedBucket.children,
-    ]
+    ];
 
     const animations = Array.prototype.map.call(beads, (bead, index) =>
       new Promise(resolve => {
@@ -133,12 +131,12 @@ class AnimatedBoard extends Component {
         setTimeout(() => {
           animateAppendChild.call(destination, bead, {
             duration: DURATION,
-            fakeAppend: true
+            fakeAppend: true,
           })
           .then(resolve);
         }, index * SPACING);
       })
-    )
+    );
 
     return Promise.all(animations);
   }
@@ -160,27 +158,3 @@ class AnimatedBoard extends Component {
     );
   }
 }
-
-const mapStateToProps = (state, ownProps) => {
-  const {board, turn, animationSteps} = state.gameState;
-  return {
-    board,
-    turn,
-    animationSteps,
-    isGameOver: isGameOver(board),
-    finalScore: finalScore(board),
-  }
-}
-
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    resetGame: () => {
-      dispatch(resetGame());
-    }
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(AnimatedBoard)

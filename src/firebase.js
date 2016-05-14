@@ -2,7 +2,7 @@ import Firebase from 'firebase';
 
 import { FIREBASE_URL } from './config';
 
-const firebase = new Firebase(FIREBASE_URL);
+export const rootRef = new Firebase(FIREBASE_URL);
 
 const childAddedQueue = dispatch => {
   // Apply each move in order.
@@ -22,20 +22,20 @@ const childAddedQueue = dispatch => {
     } else {
       queuedSnapshots[prevSnapKey] = snapshot;
     }
-  }
-}
+  };
+};
 
 const resetMoves = dispatch => {
   // Remove the listener then add it again
   // to reset it's state.
-  const movesRef = firebase.child('moves');
+  const movesRef = rootRef.child('moves');
   movesRef.off('child_added');
   movesRef.remove();
   movesRef.on('child_added', childAddedQueue(dispatch));
-}
+};
 
 export function firebaseMiddleware({ dispatch, getState }) {
-  const movesRef = firebase.child('moves');
+  const movesRef = rootRef.child('moves');
 
   movesRef.on('child_added', childAddedQueue(dispatch));
 
@@ -48,7 +48,7 @@ export function firebaseMiddleware({ dispatch, getState }) {
       // update update firebase `gameState`.
       const returnValue = next(action);
       const {board, turn} = getState().gameState;
-      firebase.child('gameState').update({board, turn});
+      rootRef.child('gameState').update({board, turn});
       return returnValue;
     } else {
       // Don't generate a new state here. Instead allow
@@ -58,18 +58,18 @@ export function firebaseMiddleware({ dispatch, getState }) {
       movesRef.push(action);
     }
 
-  }
+  };
 }
 
-export function skipPreviousAnimations ({dispatch, getState}) {
+export function skipPreviousAnimations () {
   let skipCount = 0;
 
   const fetch = new Promise(resolve => {
-    firebase.child('moves').once('value', snapshot => {
+    rootRef.child('moves').once('value', snapshot => {
       skipCount = snapshot.numChildren();
       resolve();
-    })
-  })
+    });
+  });
 
   return next => action => {
     fetch.then(() => {
@@ -79,6 +79,6 @@ export function skipPreviousAnimations ({dispatch, getState}) {
       }
 
       next(action);
-    })
-  }
+    });
+  };
 }

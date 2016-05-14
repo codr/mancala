@@ -48,7 +48,7 @@ function transform(node, deltaX, deltaY, options) {
 function addTranlate(node, deltaX, deltaY) {
   if (deltaX === 0 && deltaY === 0) return;
   const transform = node.style.transform;
-  const match = transform.match(/translate\((.*)px, (.*)px\)/)
+  const match = transform.match(/translate\((.*)px, (.*)px\)/);
   if (match) {
     deltaX += parseInt(match[1]);
     deltaY += parseInt(match[2]);
@@ -73,7 +73,7 @@ export const animateAppendChild = function(node, options={}) {
     delay: 0,
     linger: 0,
     easing: 'ease-out',
-  }
+  };
   options = Object.assign({}, defaultOptions, options);
 
   const {beforeParent, clonedParent, clonedChild} = cloneOffscreen(this, node);
@@ -95,7 +95,7 @@ export const animateAppendChild = function(node, options={}) {
       duration: alreadyTransformed ? options.duration : options.duration/2,
       delay: alreadyTransformed ? 0 : delay,
     });
-  })
+  });
 
   // direct animating nodes to their resting destation.
   eachChild(clonedParent, (child, i) => {
@@ -103,7 +103,7 @@ export const animateAppendChild = function(node, options={}) {
     if (!child.animatingNode) return;
     const {deltaX, deltaY} = getShiftOfChild(beforeParent, clonedParent, i);
     addTranlate(child.animatingNode, deltaX, deltaY);
-  })
+  });
 
   beforeParent.remove();
 
@@ -117,10 +117,10 @@ export const animateAppendChild = function(node, options={}) {
     options.fakeAppend || this.appendChild(node);
 
     delete this.clearAnimation;
-  }
+  };
 
   return new Promise((resolve) => {
-    setTimeout(resolve, options.duration + options.delay + options.linger)
-  })
+    setTimeout(resolve, options.duration + options.delay + options.linger);
+  });
 
-}
+};

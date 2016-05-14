@@ -10,7 +10,7 @@ export default class Hole extends Component {
       disabled: !active,
       'btn-primary': active,
       'not-allowed': value === 0,
-    })
+    });
     return (
       <button
         {...props}
