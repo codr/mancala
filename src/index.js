@@ -8,8 +8,8 @@ import reducers from './reducers';
 import { firebaseMiddleware, skipPreviousAnimations } from './firebase';
 
 const store = applyMiddleware(
-  firebaseMiddleware,
-  skipPreviousAnimations
+  // firebaseMiddleware,
+  // skipPreviousAnimations
 )(createStore)(reducers);
 
 ReactDOM.render(
