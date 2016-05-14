@@ -8,6 +8,7 @@ rootRef.onAuth(authData => {
     if (!players || !players[authData.uid]) {
       const numPlayers = snapshot.numChildren();
       if (numPlayers < 2) {
+        playersRef.child(authData.uid).onDisconnect().remove();
         playersRef.child(authData.uid).set({playerNumber: numPlayers});
       }
     }
@@ -15,11 +16,10 @@ rootRef.onAuth(authData => {
 });
 
 export function getPlayerNumber(cb) {
-  return rootRef.onAuth(authData => {
-    rootRef
-    .child('players')
+  rootRef.onAuth(authData => {
+    rootRef.child('players')
     .child(authData.uid)
-    .on('value', snapshot => {
+    .once('value', snapshot => {
       if (snapshot.val())
         return cb(snapshot.val().playerNumber);
       cb(-1);
