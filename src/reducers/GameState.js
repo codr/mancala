@@ -3,7 +3,7 @@ import MoveRecorder from '../util/MoveRecorder';
 
 const initialState = {
   board:[
-    [0, 8, 4, 4, 4, 4, 4],
+    [0, 4, 4, 4, 4, 4, 4],
     [4, 4, 4, 4, 4, 4, 0],
   ],
   turn: 0,
