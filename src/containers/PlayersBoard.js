@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import AnimatedBoard from '../components/AnimatedBoard';
 import { isGameOver, finalScore, resetGame, emptyHole } from '../actions';
-import { getPlayerNumber } from '../auth';
+import { onPlayerNumber } from '../auth';
 
 class PlayersBoard extends Component {
 
@@ -19,7 +19,7 @@ class PlayersBoard extends Component {
   }
 
   componentDidMount () {
-    getPlayerNumber(playerNumber => {
+    onPlayerNumber(playerNumber => {
       this.setState({playerNumber});
     });
   }

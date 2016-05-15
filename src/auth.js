@@ -8,20 +8,30 @@ rootRef.onAuth(authData => {
     if (!players || !players[authData.uid]) {
       const numPlayers = snapshot.numChildren();
       if (numPlayers < 2) {
+        let playerNumber = numPlayers;
+        if (numPlayers === 1) {
+          const otherPlayersId = Object.keys(snapshot.val())[0];
+          const otherPlayer = players[otherPlayersId];
+          const otherPlayersNumber = otherPlayer.playerNumber;
+          playerNumber = otherPlayersNumber === 0 ? 1 : 0;
+        }
         playersRef.child(authData.uid).onDisconnect().remove();
-        playersRef.child(authData.uid).set({playerNumber: numPlayers});
+        playersRef.child(authData.uid).set({playerNumber});
       }
     }
   });
 });
 
-export function getPlayerNumber(cb) {
+export function onPlayerNumber(cb) {
   rootRef.onAuth(authData => {
-    rootRef.child('players')
+    if (!authData) return cb(-1);
+    rootRef
+    .child('players')
     .child(authData.uid)
-    .once('value', snapshot => {
-      if (snapshot.val())
-        return cb(snapshot.val().playerNumber);
+    .child('playerNumber')
+    .on('value', snapshot => {
+      if (typeof snapshot.val() !== 'undefined')
+        return cb(snapshot.val());
       cb(-1);
     });
   });
