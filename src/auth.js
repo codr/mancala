@@ -2,8 +2,9 @@ import { rootRef } from './firebase';
 
 // assign player number.
 rootRef.onAuth(authData => {
+  if (!authData) return;
   const playersRef = rootRef.child('players');
-  playersRef.once('value', snapshot => {
+  playersRef.on('value', snapshot => {
     const players = snapshot.val();
     if (!players || !players[authData.uid]) {
       const numPlayers = snapshot.numChildren();
@@ -37,8 +38,8 @@ export function onPlayerNumber(cb) {
   });
 }
 
+// If we aren't logged in then log in.
 const user = rootRef.getAuth();
-
 if (!user) {
   rootRef.authAnonymously(function(error, authData) {
     if (error) {
