@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "env NODE_ENV=production webpack --config ./webpack.config.js --progress --colors",
-    "start": "webpack-dev-server --progress --inline --port 8888",
+    "start": "webpack-dev-server --progress --inline --port 8888 --host 0.0.0.0",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js 'test/**/*.js'",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint ."
