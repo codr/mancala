@@ -6,6 +6,10 @@
   cursor: not-allowed;
 }
 
+.container {
+  padding-top: 15px;
+}
+
 .bead-container {
   width: 3em;
   min-height: 4em;
@@ -21,13 +25,13 @@
   outline: none;
 }
 
-@media (min-width: 768px) {
+@media screen and (min-width: 768px) {
   .end-hole {
     height: 13em;
   }
 }
 
-@media (max-width: 767px) {
+@media screen and (max-width: 767px) and (orientation:portrait){
   .bead-container {
     width: 6em;
     min-height: 2em;
@@ -35,5 +39,24 @@
 
   .end-hole .bead-container {
     width: 14em;
+  }
+}
+
+@media screen and (max-width: 767px) and (orientation:landscape) {
+  /* build 8 column grid. */
+  .col-sm-1 {
+    float: left;
+    width: 12.5%;
+  }
+
+  .end-hole {
+    height: 13em;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .col-sm-1 {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
