@@ -18,6 +18,7 @@ rootRef.onAuth(authData => {
         }
         playersRef.child(authData.uid).onDisconnect().remove();
         playersRef.child(authData.uid).set({playerNumber});
+        console.debug('Assigned player number:', playerNumber);
       }
     }
   });
@@ -41,11 +42,11 @@ export function onPlayerNumber(cb) {
 // If we aren't logged in then log in.
 const user = rootRef.getAuth();
 if (!user) {
-  rootRef.authAnonymously(function(error, authData) {
+  rootRef.authAnonymously(function(error) {
     if (error) {
       console.log('Login Failed!', error);
     } else {
-      console.log('Authenticated successfully with payload:', authData);
+      console.log('New authenticated successfully ');
     }
   });
 }
