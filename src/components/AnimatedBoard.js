@@ -96,7 +96,6 @@ export default class AnimatedBoard extends Component {
 
   animateCapture (step, lastMovedBead) {
     const {hole} = step;
-    const scoreBucket = this.getBucket(hole);
     let destination;
     let capturedBucket;
     if (hole.row === 0){
@@ -120,15 +119,16 @@ export default class AnimatedBoard extends Component {
     }
 
     // move already animating nodes
-    const cloneChildren = capturedBucket.animationClone.children;
-    const reduce = Array.prototype.reduce;
-    const animatingBeads = reduce.call(cloneChildren, (memo, node) =>
-      node.animatingNode ? [...memo, node.animatingNode] : memo
-    , []);
+    const animatingBeads = [];
+    if (capturedBucket.animationClone) {
+      const cloneChildren = capturedBucket.animationClone.children;
+      Array.prototype.forEach.call(cloneChildren, node =>
+        node.animatingNode && animatingBeads.push(node.animatingNode)
+      );
+    }
 
     const beads = [
       lastMovedBead,
-      ...scoreBucket.children,
       ...capturedBucket.children,
       ...animatingBeads,
     ];
