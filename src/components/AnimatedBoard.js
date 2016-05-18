@@ -4,7 +4,7 @@ import { animateAppendChild } from '../util/animate';
 
 const DURATION = 500; // time bead takes to animate
 const SPACING = 250; // time between each bead animation
-const LINGER = 100; // time to pause after animation is complete
+const LINGER = 200; // time to pause after animation is complete
 
 export default class AnimatedBoard extends Component {
 
@@ -119,10 +119,18 @@ export default class AnimatedBoard extends Component {
       });
     }
 
+    // move already animating nodes
+    const cloneChildren = capturedBucket.animationClone.children;
+    const reduce = Array.prototype.reduce;
+    const animatingBeads = reduce.call(cloneChildren, (memo, node) =>
+      node.animatingNode ? [...memo, node.animatingNode] : memo
+    , []);
+
     const beads = [
       lastMovedBead,
       ...scoreBucket.children,
       ...capturedBucket.children,
+      ...animatingBeads,
     ];
 
     const animations = Array.prototype.map.call(beads, (bead, index) =>
