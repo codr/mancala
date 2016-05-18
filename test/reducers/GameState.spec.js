@@ -77,6 +77,43 @@ describe('GameState' , () => {
       ]);
     });
 
+
+    it('captures the hole when it lands on the initial hole', () => {
+      var initialState = {
+        board: [
+          [6, 10, 4, 5, 0, 2, 1],
+          [9, 13, 2, 6, 0, 0, 5],
+        ],
+        turn: 1,
+      };
+      var action = emptyHole(1, 1);
+
+      var newState = GameState(initialState, action);
+
+      expect( newState.board ).to.eql([
+        [6, 11, 0, 6, 1, 3, 2],
+        [10, 0, 3, 7, 1, 1, 12],
+      ]);
+    });
+
+    it('does not captures the hole after rounding the board.', () => {
+      var initialState = {
+        board: [
+          [6, 10, 4, 4, 0, 2, 1],
+          [9, 14, 0, 6, 0, 0, 5],
+        ],
+        turn: 1,
+      };
+      var action = emptyHole(1, 1);
+
+      var newState = GameState(initialState, action);
+
+      expect( newState.board ).to.eql([
+        [6, 11, 5, 5, 1, 3, 2],
+        [10, 1, 2, 7, 1, 1, 6],
+      ]);
+    });
+
   });
 
   describe('.turn', () => {

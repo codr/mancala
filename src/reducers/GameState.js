@@ -22,7 +22,7 @@ export default function gameState(state = initialState, action) {
         recorder.moveBead
       );
       var turn = getNextTrun(state, action.row, action.column);
-      if (shouldCapture(state, lastPiece)) {
+      if (shouldCapture({board, turn: state.turn}, lastPiece)) {
         capture(board, lastPiece);
         recorder.capture(lastPiece);
       }
@@ -83,9 +83,9 @@ function getNextTrun(state, row, column) {
   return state.turn === 0 ? 1: 0;
 }
 
-function shouldCapture(state, {row, column} = {}) {
-  return (state.turn === row &&
-    state.board[row][column] === 0 &&
+function shouldCapture({board, turn}, {row, column}={}) {
+  return (turn === row &&
+    board[row][column] === 1 &&
     !isScoreHole({row, column}));
 }
 
