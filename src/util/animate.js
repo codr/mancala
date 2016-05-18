@@ -71,7 +71,6 @@ export const animateAppendChild = function(node, options={}) {
   const defaultOptions = {
     duration: 1000,
     delay: 0,
-    linger: 0,
     easing: 'ease-out',
   };
   options = Object.assign({}, defaultOptions, options);
@@ -120,7 +119,7 @@ export const animateAppendChild = function(node, options={}) {
   };
 
   return new Promise((resolve) => {
-    setTimeout(resolve, options.duration + options.delay + options.linger);
+    node.addEventListener('transitionend', resolve);
   });
 
 };
