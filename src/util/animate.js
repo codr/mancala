@@ -8,7 +8,7 @@ function cloneOffscreen(parent, child) {
   if (parent.animationClone) {
     clonedParent = parent.animationClone;
   } else {
-    clonedParent = parent.cloneNode(true);
+    clonedParent = parent.cloneNode(parent !== child.parentNode);
     parent.animationClone = clonedParent;
   }
 
@@ -65,7 +65,6 @@ function eachChild(node, fn) {
   Array.prototype.forEach.call(node.children, fn);
 }
 
-
 export const animateAppendChild = function(node, options={}) {
 
   const defaultOptions = {
@@ -86,6 +85,8 @@ export const animateAppendChild = function(node, options={}) {
 
   // move existing sibilings
   eachChild(this, (child, i) => {
+    if (!beforeParent.children[i]) return;
+    if (clonedParent.children[i].animatingNode) return;
     const {deltaX, deltaY} = getShiftOfChild(beforeParent, clonedParent, i);
     const delay = options.delay + (options.duration / 2);
     const alreadyTransformed = !!child.style.transform;
