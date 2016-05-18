@@ -86,7 +86,6 @@ export default class AnimatedBoard extends Component {
       setTimeout(() => {
         animateAppendChild.call(destination, bead, {
           duration: DURATION,
-          delay: 100,
           fakeAppend: true,
         })
         .then(() => resolve(bead));
