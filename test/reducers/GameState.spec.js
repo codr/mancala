@@ -195,4 +195,66 @@ describe('GameState' , () => {
 
   });
 
+  describe('.animationSteps', () => {
+
+    it('records the steps of a move', () => {
+      var initialState = undefined; // default.
+      var action = emptyHole(0, 4);
+
+      var newState = GameState(initialState, action);
+
+      expect( newState.animationSteps ).to.eql([
+        {
+          end: {
+            column: 3,
+            row: 0,
+          },
+          index: 3,
+          start: {
+            column: 4,
+            row: 0,
+          },
+          type: 'MOVE_BEAD',
+        },
+        {
+          end: {
+            column: 2,
+            row: 0,
+          },
+          index: 2,
+          start: {
+            column: 4,
+            row: 0,
+          },
+          type: 'MOVE_BEAD',
+        },
+        {
+          end: {
+            column: 1,
+            row: 0,
+          },
+          index: 1,
+          start: {
+            column: 4,
+            row: 0,
+          },
+          type: 'MOVE_BEAD',
+        },
+        {
+          end: {
+            column: 0,
+            row: 0,
+          },
+          index: 0,
+          start: {
+            column: 4,
+            row: 0,
+          },
+          type: 'MOVE_BEAD',
+        },
+
+      ]);
+    });
+  });
+
 });

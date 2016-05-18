@@ -18,7 +18,7 @@ rootRef.onAuth(authData => {
         }
         playersRef.child(authData.uid).onDisconnect().remove();
         playersRef.child(authData.uid).set({playerNumber});
-        console.debug('Assigned player number:', playerNumber);
+        console.log('Assigned player number:', playerNumber);
       }
     }
   });
